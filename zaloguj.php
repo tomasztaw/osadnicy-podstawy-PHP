@@ -22,30 +22,35 @@
         $haslo = $_POST['haslo'];
 
         $login = htmlentities($login, ENT_QUOTES, "UTF-8");
-        $haslo = htmlentities($haslo, ENT_QUOTES, "UTF-8");
   
         if ($rezultat = @$poloczenie->query(
-            sprintf("SELECT * FROM uzytkownicy WHERE user='%s' AND pass='%s'",
-            mysqli_real_escape_string($poloczenie, $login),
-            mysqli_real_escape_string($poloczenie, $haslo))))
+            sprintf("SELECT * FROM uzytkownicy WHERE user='%s'",
+            mysqli_real_escape_string($poloczenie, $login))))
         {
             $ilu_userow = $rezultat->num_rows;
             if ($ilu_userow > 0)
             {
-                $_SESSION['zalogowany'] = true;
-
                 $wiersz = $rezultat->fetch_assoc();
-                $_SESSION['id'] = $wiersz['id'];
-                $_SESSION['user'] = $wiersz['user'];
-                $_SESSION['drewno'] = $wiersz['drewno'];
-                $_SESSION['kamien'] = $wiersz['kamien'];
-                $_SESSION['zboze'] = $wiersz['zboze'];
-                $_SESSION['email'] = $wiersz['email'];
-                $_SESSION['dnipremium'] = $wiersz['dnipremium'];
+                
+                if (password_verify($haslo, $wiersz['pass']))
+                {
+                    $_SESSION['zalogowany'] = true;
 
-                unset($_SESSION['blad']);
-                $rezultat->close();
-                header('Location: gra.php');
+                    $_SESSION['id'] = $wiersz['id'];
+                    $_SESSION['user'] = $wiersz['user'];
+                    $_SESSION['drewno'] = $wiersz['drewno'];
+                    $_SESSION['kamien'] = $wiersz['kamien'];
+                    $_SESSION['zboze'] = $wiersz['zboze'];
+                    $_SESSION['email'] = $wiersz['email'];
+                    $_SESSION['dnipremium'] = $wiersz['dnipremium'];
+
+                    unset($_SESSION['blad']);
+                    $rezultat->close();
+                    header('Location: gra.php');
+                } else {
+                    $_SESSION['blad'] = '<span style="color:red">Nieprawidłowy login lub hasło!!!!</span>';
+                    header('Location: index.php');
+                }
             } else {
                 $_SESSION['blad'] = '<span style="color:red">Nieprawidłowy login lub hasło!</span>';
                 header('Location: index.php');
