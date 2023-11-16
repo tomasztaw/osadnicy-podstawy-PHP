@@ -1,0 +1,37 @@
+echo time()."<br>";
+
+    echo mktime(19, 37, 0, 4, 2, 2005)."<br>";
+
+    echo microtime()."<br>";
+
+    // Pobranie aktualnego czasu w postaci liczby sekund od epoki
+    $currentTimestamp = time();
+
+    // Wyświetlenie aktualnego timestampu
+    echo "Aktualny timestamp: $currentTimestamp<br>";
+
+    // Ustawienia strefy czasowej (opcjonalne, w zależności od potrzeb)
+    date_default_timezone_set('Europe/Warsaw');
+
+    // Pobranie aktualnej daty i czasu
+    $currentDateTime = date('Y-m-d H:i:s');
+
+    // Wyświetlenie aktualnego czasu serwera
+    echo "Czas serwera: $currentDateTime<br>";
+
+    echo date('d-m-y H:i:s')."<br><br>";
+
+    $dataczas = new DateTime();
+
+    echo $dataczas->format('Y-m-d H:i:s')."<br>";
+
+    print_r($dataczas)."<br>";
+
+    $dzien = 26;
+    $miesiac = 7;
+    $rok = 1875;
+
+    // Pamiętaj - miesiąc, dzień, rok
+    if (checkdate($miesiac, $dzien, $rok))
+        echo "<br>Poprawna data!";
+    else echo "<br>Niepoprawna data!";
